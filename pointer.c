@@ -1,7 +1,7 @@
 /*
  * CSE 351 Lab 1 (Data Lab - Pointers)
  *
- * <PLEASE REPLACE THIS LINE WITH YOUR NAME AND STUDENT USERNAME>
+ * Xiaotong Yang (1765014 yangx38)
  *
  * pointer.c - Source file with your solutions to the Lab.
  *             This is the file you will hand in to your instructor.
@@ -101,8 +101,9 @@ int intSize() {
   int * intPtr1;
   int * intPtr2;
   // Write code to compute size of an integer.
-
-  return 2;
+  intPtr1 = intArray;
+  intPtr2 = intArray+1;
+  return (char*) intPtr2 - (char*) intPtr1;
 }
 
 /*
@@ -124,8 +125,9 @@ int doubleSize() {
   double * doubPtr1;
   double * doubPtr2;
   // Write code to compute size of a double.
-
-  return 2;
+  doubPtr1 = doubArray;
+  doubPtr2 = doubPtr1+1;
+  return (char*) doubPtr2 - (char*) doubPtr1;
 }
 
 /*
@@ -147,8 +149,9 @@ int pointerSize() {
   double ** ptrPtr1;
   double ** ptrPtr2;
   // Write code to compute size of a pointer.
-
-  return 2;
+  ptrPtr1 = ptrArray;
+  ptrPtr2 = ptrPtr1 + 1;
+  return (char*)ptrPtr2 - (char*)ptrPtr1;
 }
 
 /*
@@ -168,6 +171,9 @@ int pointerSize() {
  */
 void swapInts(int *ptr1, int *ptr2) {
   // Your code here
+  int temp = *ptr1;
+  *ptr1 = *ptr2;
+  *ptr2 = temp; 
 }
 
 /*
@@ -189,6 +195,15 @@ int changeValue() {
   int * intPtr1 = intArray;
   // Remember not to use constants greater than 255.
   // Remember to use * to dereference. You cannot use '[<index>]' syntax.
+
+  // get 6th element
+  int * intPtr2;
+  intPtr2 = intPtr1 + 5;
+  // val 0x15F
+  int val = 0x1;
+  val <<= 8;
+  val += 0x5F;
+  *intPtr2 = val;
 
   return intArray[5];
 }
@@ -212,7 +227,11 @@ int changeValue() {
  */
 int withinSameBlock(int *ptr1, int *ptr2) {
   // Your code here
-  return 2;
+  int p1 = (char*) ptr1;
+  int p2 = (char*) ptr2;
+  p1 |= 0x003F;
+  p2 |= 0x003F;
+  return p1 == p2;
 }
 
 /*
@@ -236,7 +255,10 @@ int withinSameBlock(int *ptr1, int *ptr2) {
  */
 int withinArray(int * intArray, int size, int * ptr) {
   // Your code here
-  return 2;
+  int a1 = intArray;
+  int a2 = ptr;
+  int mask = (a1 - a2) & (~(1<<31)); 
+  return size == (a2 & mask);
 }
 
 /*
@@ -258,7 +280,12 @@ int withinArray(int * intArray, int size, int * ptr) {
  */
 int stringLength(char * s) {
   // Your code here
-  return 2;
+  int len = 0;
+  while (*s != '\0') {
+    len += 1;
+    s += 1;
+  }
+  return len;
 }
 
 /*
@@ -285,6 +312,11 @@ int stringLength(char * s) {
 int endianExperiment(int* ptr) {
   char *bytePtr;
   // Your code here
+  char *bytePtr;
+  bytePtr = (char*) ptr;
+  *bytePtr = 0x77;
+  *(bytePtr + 1) = 0x5c;
+  *(bytePtr + 2) = 0x5;
   return *ptr;
 }
 
@@ -326,6 +358,15 @@ int endianExperiment(int* ptr) {
 void selectionSort(int arr[], int arrLength) {
   int i, j, min_index;
   // Your code here
+  for (i = 0; i < arrLength - 1; i++) {
+    min_index = i;
+    for (j = i + 1; j < arrLength; j++) {
+      if (*(arr + min_index) > *(arr + j)) {
+        min_index = j;
+      }
+      swapInts((arr + i), (arr + min_index));
+    }
+  }
 }
 
 
